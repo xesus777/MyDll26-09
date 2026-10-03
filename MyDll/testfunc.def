@@ -1,0 +1,6 @@
+LIBRARY     testfunc
+DESCRIPTION 'DLL-библиотека для расчета параметров треугольника'
+EXPORTS
+GetPerimeter
+GetArea
+GetDescription

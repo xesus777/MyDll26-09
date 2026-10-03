@@ -1,0 +1,49 @@
+#include <windows.h>
+#include <stdio.h>
+
+HINSTANCE hLib;
+
+double (*GetPerimeter)(double, double, double);
+double (*GetArea)(double, double, double);
+void (*GetDescription)(double, double, double, char*);
+
+int main(int argc, char* argv[])
+{
+	double side1 = 3.0;
+	double side2 = 4.0;
+	double side3 = 5.0;
+
+	char descBuffer[256];
+
+	hLib = LoadLibrary("MyDll.dll");
+	if (hLib == NULL) {
+		printf("Cannot load library: testfunc.dll not found!\n");
+		exit(-1);
+	}
+
+	GetPerimeter = (double(*)(double, double, double))GetProcAddress(hLib, "GetPerimeter");
+	GetArea = (double(*)(double, double, double))GetProcAddress(hLib, "GetArea");
+	GetDescription = (void(*)(double, double, double, char*))GetProcAddress(hLib, "GetDescription");
+
+	if (GetPerimeter == NULL || GetArea == NULL || GetDescription == NULL) {
+		printf("Geometry functions not found inside the library!\n");
+		FreeLibrary(hLib);
+		exit(-2);
+	}
+
+	printf("---Functions---\n");
+
+	(*GetDescription)(side1, side2, side3, descBuffer);
+	printf("Description: %s\n", descBuffer);
+
+	double perimeter = (*GetPerimeter)(side1, side2, side3);
+	printf("Perimeter:   %.2f\n", perimeter);
+
+	double area = (*GetArea)(side1, side2, side3);
+	printf("Area:        %.2f\n", area);
+
+	printf("---------------\n");
+
+	FreeLibrary(hLib);
+	return TRUE;
+}
