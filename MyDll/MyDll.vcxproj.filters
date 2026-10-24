@@ -40,5 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="code.txt" />
+    <Text Include="..\..\..\..\Desktop\Новый текстовый документ.txt" />
   </ItemGroup>
 </Project>
